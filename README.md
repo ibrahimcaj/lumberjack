@@ -1,4 +1,4 @@
-#Info:
+# Info:
 bot for discord w.i.p
 # Bot todo list:
 - User starts with $15 
