@@ -1,0 +1,23 @@
+{
+  "name": "lumberjack",
+  "version": "1.0.0",
+  "description": "Jack the Lumberjack",
+  "main": "index.js",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanishedvan/lumberjack.git"
+  },
+  "author": "vanishedvan, EnderNator10, LightWayUp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vanishedvan/lumberjack/issues"
+  },
+  "homepage": "https://github.com/vanishedvan/lumberjack#readme"
+}
