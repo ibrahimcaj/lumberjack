@@ -21,7 +21,7 @@ module.exports.run = async (client, msg, args) => {
       
       if (rows[0] === undefined) {
         db.run(`INSERT INTO wood(id, inventory) VALUES(?, ?)`, [msg.author.id, "{}"], function(err) {
-          console.log("Inserted.");
+          //console.log("Inserted.");
         });
       }
       

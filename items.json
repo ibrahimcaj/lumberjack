@@ -1,9 +1,9 @@
 {
-  "paper": ["Paper. Just regular, ol' piece of paper. Please recycle paper.", "<:paper:592648250461388821>", "1"],
-  "wood": ["A nice and heavy wood log.", "<:log:592250155089133568>", "5"],
-  "stick": ["You didn't believe you could cut down trees with a stick, but you can.", "<:stick:592263677928013825>", "5", "5"],
-  "wooden_axe": ["A much better axe, made out of wood you cut.", "<:wood_axe:592264114445746176>", "15", "10"],
-  "stone_axe": ["An axe made out of stone. Pretty simple.", "<:stone_axe:592264185262505984>", "30", "15"],
-  "iron_axe": ["Woah, another axe, but made out of freshly smelt iron.", "<:iron_axe:592264236118441990>", "55", "20"],
-  "diamond_axe": ["WOAH! AN AXE MADE OUT OF DIAMONDS? THAT'S SICK!", "<:diamond_axe:592264284914974730>", "70", "30"]
+  "paper": ["Paper", "Paper. Just regular, ol' piece of paper. Please recycle paper.", "<:paper:592648250461388821>", "1"],
+  "wood": ["Wood", "A nice and heavy wood log.", "<:log:592250155089133568>", "5"],
+  "stick": ["Stick", "You didn't believe you could cut down trees with a stick, but you can.", "<:stick:592263677928013825>", "5", "5"],
+  "wooden_axe": ["Wooden Axe", "A much better axe, made out of wood you cut.", "<:wood_axe:592264114445746176>", "15", "10"],
+  "stone_axe": ["Stone Axe", "An axe made out of stone. Pretty simple.", "<:stone_axe:592264185262505984>", "30", "15"],
+  "iron_axe": ["Iron Axe", "Woah, another axe, but made out of freshly smelt iron.", "<:iron_axe:592264236118441990>", "55", "20"],
+  "diamond_axe": ["Diamond Axe", "WOAH! AN AXE MADE OUT OF DIAMONDS? THAT'S SICK!", "<:diamond_axe:592264284914974730>", "70", "30"]
 }

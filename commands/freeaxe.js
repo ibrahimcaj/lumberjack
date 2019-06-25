@@ -13,12 +13,10 @@ module.exports.run = async (client, msg, args) => {
 	
 		obj["iron_axe"] = ["1"]
 	
-		var back = JSON.stringify(obj);
-	
-		console.log("hshdh")
+		var back = JSON.stringify(obj);		
 	
 		db.run(`INSERT INTO wood(id, inventory) VALUES(?, ?)`, [msg.author.id, back], function(err) {
-			console.log("ok")
+			//console.log("Inserted.")
 		});
 	});
 }
