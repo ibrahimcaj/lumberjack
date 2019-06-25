@@ -4,7 +4,10 @@
   "description": "Jack the Lumberjack",
   "main": "index.js",
   "dependencies": {
-    "fs": "0.0.1-security"
+    "discord.js": "^11.5.1",
+    "fs": "0.0.1-security",
+    "random-value-generator": "^0.2.0",
+    "sqlite3": "^4.0.9"
   },
   "devDependencies": {},
   "scripts": {

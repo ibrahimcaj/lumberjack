@@ -40,7 +40,15 @@ client.on("message", async message => {
   let args = messageArray.slice(1);
   
   let commandfile = client.commands.get(cmd.slice(prefix.length));
-  if(commandfile) commandfile.run(client,message,args);
+  try {
+    if(commandfile) commandfile.run(client,message,args);
+
+}
+catch(error) {
+ console.error(commandfile+":"+"Command error: "+error);
+message.send(":five: :zero: :zero: Internal server error:" + error);
+}
+
 });
 
 client.on("message", async message => {
