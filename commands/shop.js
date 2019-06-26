@@ -48,11 +48,15 @@ module.exports.run = async (client, msg, args) => {
           }
           const item = items[args[1]];
 
+          const numberToBuy = args.length > 2 ? Number(args[2]) : 1;
+          if (numberToBuy <= 0) {
+            return msg.channel.send(numberToBuy ? "...what?? Use sell for that" : "But why?");
+          }
           const obj = JSON.parse(rows[0].inventory);
-          obj[args[1]] = obj[args[1]] == null ? 1 : obj[args[1]] + 1;
-          const difference = rows[0].money - item[3];
+          obj[args[1]] = obj[args[1]] == null ? numberToBuy : obj[args[1]] + numberToBuy;
+          const difference = rows[0].money - (item[3] * numberToBuy);
           if (difference >= 0) {
-            db.run(`INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)`, [idAsNumber, difference, JSON.stringify(obj)], err => {
+            db.run("INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)", [idAsNumber, difference, JSON.stringify(obj)], err => {
               if (!err) {
                 console.log("Inserted.");
               }
@@ -63,6 +67,7 @@ module.exports.run = async (client, msg, args) => {
           }
           break;
         }
+
         case "sell": {
           if (args.length === 1) {
             return msg.channel.send("Please specify what you want to sell!");
@@ -73,21 +78,27 @@ module.exports.run = async (client, msg, args) => {
           }
           const item = items[args[1]];
 
+          const numberToSell = args.length > 2 ? Number(args[2]) : 1;
+          if (numberToSell <= 0) {
+            return msg.channel.send(numberToSell ? "...what?? Use buy for that" : "But why?");
+          }
           const obj = JSON.parse(rows[0].inventory);
-          if (obj[args[1]] == null || obj[args[1]] === 0) {
+          if (obj[args[1]] == null || obj[args[1]] - numberToSell < 0) {
             return msg.channel.send(`Don't try to scam me mate. You don't have enough ${item[0]}s.`);
           }
-          obj[args[1]] -= 1;
+          obj[args[1]] -= numberToSell;
           if (obj[args[1]] === 0) {
             delete obj[args[1]];
           }
-          db.run(`INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)`, [idAsNumber, rows[0].money + item[3], JSON.stringify(obj)], err => {
+          db.run("INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)",
+            [idAsNumber, rows[0].money + (item[3] * numberToSell), JSON.stringify(obj)], err => {
             if (!err) {
               console.log("Inserted.");
             }
           });
           break;
         }
+
         case "item": {
           if (args.length === 1) {
             return msg.channel.send("Please specify an item!");
