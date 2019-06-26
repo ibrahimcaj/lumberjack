@@ -77,6 +77,9 @@ module.exports.run = async (client, msg, args) => {
             return msg.channel.send("Mate, that item does not exist.");
           }
           const item = items[args[1]];
+          if (item.length === 5) {
+            return msg.channel.send("You can't sell tools!");
+          }
 
           const numberToSell = args.length > 2 ? Number(args[2]) : 1;
           if (numberToSell <= 0) {
