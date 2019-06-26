@@ -3,7 +3,7 @@ const random = require('random-value-generator');
 
 const db = new sqlite3.Database('./structures/jack.db').on("error", console.error);
 
-let cooldown = new Map();
+const cooldown = new Map();
 const cdseconds = 300;
 const codeInputTime = 7;
 
@@ -24,8 +24,7 @@ module.exports.run = async (client, msg) => {
         db.run("INSERT INTO wood(id, inventory) VALUES(?, ?)", idAsNumber, rows[0].inventory);
       }
 
-      const json = rows[0].inventory;
-      const obj = JSON.parse(json);
+      const obj = JSON.parse(rows[0].inventory);
       msg.channel.send("Searching for the nearest tree to cut down...");
 
       const code = random.randomHash(5);
@@ -53,11 +52,11 @@ module.exports.run = async (client, msg) => {
               }
             }).catch(() =>
               newmsg.channel.send("You ran out of time, so the woodskeeper kicked you out of the woods. Please try using the command again.")));
-            }, 5000);
+      }, 5000);
     });
   }
-}
+};
 
 module.exports.help = {
   name: "chop" 
-}
+};
