@@ -43,7 +43,7 @@ module.exports.run = async (client, msg) => {
                 cooldown.set(msg.author.id, msg.createdTimestamp);
                 newmsg.channel.send(`You have cut the tree down! You got ${logs} wood logs!`);
 
-                obj.wood += logs;
+                obj.wood = obj.wood == null ? logs : obj.wood + logs;
 
                 db.run("INSERT INTO wood(id, inventory) VALUES(?, ?)", idAsNumber, JSON.stringify(obj));
 
