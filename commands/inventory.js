@@ -20,13 +20,6 @@ module.exports.run = async (client, msg) => {
 
     const inv = JSON.parse(rows[0].inventory);
 
-    if (rows[0].inventory === "{}") {
-      return msg.channel.send(new Discord.RichEmbed()
-        .setColor('#ff0000')
-        .setAuthor("Inventory")
-        .addField("No items.", "Oh look. Its empty."));
-    }
-
     const embed = new Discord.RichEmbed()
       .setColor('#ff0000')
       .setAuthor("Inventory");
@@ -35,7 +28,14 @@ module.exports.run = async (client, msg) => {
 
       const itemconfig = items[Object.keys(inv)[i]];
 
-      embed.addField(`${itemconfig[2]} ${itemconfig[0]}`, `Amount: ${inv[Object.keys(inv)[i]]}`);
+      const amount = inv[Object.keys(inv)[i]];
+      if (amount !== 0) {
+        embed.addField(`${itemconfig[2]} ${itemconfig[0]}`, `Amount: ${amount}`);
+      }
+    }
+
+    if (!embed.fields.length) {
+      embed.addField("No items.", "Oh look. Its empty.");
     }
 
     msg.channel.send(embed);
