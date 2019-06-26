@@ -22,9 +22,9 @@ module.exports.run = async (client, msg) => {
 
     if (rows[0].inventory === "{}") {
       return msg.channel.send(new Discord.RichEmbed()
-      	.setColor('#ff0000')
-      	.setAuthor("Inventory")
-      	.addField("No items.", "Oh look. Its empty."));
+        .setColor('#ff0000')
+        .setAuthor("Inventory")
+        .addField("No items.", "Oh look. Its empty."));
     }
 
     const embed = new Discord.RichEmbed()

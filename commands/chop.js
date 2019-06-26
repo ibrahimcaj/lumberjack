@@ -58,5 +58,5 @@ module.exports.run = async (client, msg) => {
 };
 
 module.exports.help = {
-  name: "chop" 
+  name: "chop"
 };
