@@ -36,28 +36,61 @@ module.exports.run = async (client, msg, args) => {
       }
 
       msg.channel.send(embed);
-    } else if (args[0] === "buy") {
-      if (args.length === 1) {
-        return msg.channel.send("Please specify what you want to buy!");
-      }
-
-      if (!itemlist.includes(args[1])) {
-        return msg.channel.send("Mate, that item does not exist.");
-      }
-      const item = items[args[1]];
-
-      const obj = JSON.parse(rows[0].inventory);
-      obj[args[1]] = obj[args[1]] == null ? 1 : obj[args[1]] + 1;
-      const difference = rows[0].money - item[3];
-      if (difference >= 0) {
-        db.run(`INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)`, [idAsNumber, difference, JSON.stringify(obj)], err => {
-          if (!err) {
-            console.log("Inserted.");
+    } else {
+      switch (args[0]) {
+        case "buy": {
+          if (args.length === 1) {
+            return msg.channel.send("Please specify what you want to buy!");
           }
-        });
 
-      } else {
-        return msg.channel.send("Don't try to scam me mate. You don't have enough money.");
+          if (!itemlist.includes(args[1])) {
+            return msg.channel.send("Mate, that item does not exist.");
+          }
+          const item = items[args[1]];
+
+          const obj = JSON.parse(rows[0].inventory);
+          obj[args[1]] = obj[args[1]] == null ? 1 : obj[args[1]] + 1;
+          const difference = rows[0].money - item[3];
+          if (difference >= 0) {
+            db.run(`INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)`, [idAsNumber, difference, JSON.stringify(obj)], err => {
+              if (!err) {
+                console.log("Inserted.");
+              }
+            });
+
+          } else {
+            return msg.channel.send("Don't try to scam me mate. You don't have enough money.");
+          }
+          break;
+        }
+        case "sell": {
+          if (args.length === 1) {
+            return msg.channel.send("Please specify what you want to sell!");
+          }
+
+          if (!itemlist.includes(args[1])) {
+            return msg.channel.send("Mate, that item does not exist.");
+          }
+          const item = items[args[1]];
+
+          const obj = JSON.parse(rows[0].inventory);
+          if (obj[args[1]] == null || obj[args[1]] === 0) {
+            return msg.channel.send(`Don't try to scam me mate. You don't have enough ${item[0]}s.`);
+          }
+          obj[args[1]] -= 1;
+          if (obj[args[1]] === 0) {
+            delete obj[args[1]];
+          }
+          db.run(`INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)`, [idAsNumber, rows[0].money + item[3], JSON.stringify(obj)], err => {
+            if (!err) {
+              console.log("Inserted.");
+            }
+          });
+          break;
+        }
+        case "item": {
+          ;
+        }
       }
     }
 
