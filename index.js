@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const sqlite3 = require('sqlite3');
 const random = require('random-value-generator');
 const fs = require('fs');
+const AsyncFunction = (async () => {}).constructor;
 
 const client = new Discord.Client({disableEveryone: true});
 client.commands = new Discord.Collection();
@@ -40,10 +41,21 @@ client.on("message", async message => {
   let args = messageArray.slice(1);
   
   let commandfile = client.commands.get(cmd.slice(prefix.length));
-  if(commandfile) commandfile.run(client,message,args).catch(function(err) {
-    console.error("error: "+err);
-message.reply("\n:five: :zero: :zero: Internal server error:``" + err + "``");
-  });
+  if (!commandfile) return;
+  const errorHandle = error => {
+    console.error(`error: ${error}`);
+    message.reply(`\n:five: :zero: :zero: Internal server error:\`\`${error}\`\``);
+  };
+  const runFunction = commandfile.run;
+  if (runFunction instanceof AsyncFunction) {
+    runFunction(client,message,args).catch(errorHandle);
+  } else {
+    try {
+      runFunction(client,message,args);
+    } catch (err) {
+      errorHandle(err);
+    }
+  }
 });
 
 client.on("message", async message => {
