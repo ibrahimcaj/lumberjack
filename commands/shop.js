@@ -32,7 +32,7 @@ module.exports.run = async (client, msg, args) => {
 
       for (let i = 0; i < itemlist.length; i++) {
         const item = items[itemlist[i]];
-        embed.addField(`${item[2]} ${item[0]}`, `Description: ${item[1]}\nPrice: ${item[3]}${item.length === 5 ? `\nDurability: ${item[4]}` : ""}`);
+        embed.addField(`${item[2]} ${item[0]}`, `Description: ${item[1]}\nPrice: ${item[3]}${item.length === 5 ? `\nDurability: ${item[4]}` : ""}\nID: ${itemlist[i]}`);
       }
 
       msg.channel.send(embed);
@@ -50,7 +50,7 @@ module.exports.run = async (client, msg, args) => {
 
           const numberToBuy = args.length > 2 ? Number(args[2]) : 1;
           if (numberToBuy <= 0) {
-            return msg.channel.send(numberToBuy ? "...what?? Use sell for that" : "But why?");
+            return msg.channel.send(numberToBuy ? "Huh!? Use sell for that." : "Don't use your little tricks, they don't work. Use sell for that.");
           }
           const obj = JSON.parse(rows[0].inventory);
           obj[args[1]] = obj[args[1]] == null ? numberToBuy : obj[args[1]] + numberToBuy;
@@ -83,7 +83,7 @@ module.exports.run = async (client, msg, args) => {
 
           const numberToSell = args.length > 2 ? Number(args[2]) : 1;
           if (numberToSell <= 0) {
-            return msg.channel.send(numberToSell ? "...what?? Use buy for that" : "But why?");
+            return msg.channel.send(numberToSell ? "Huh!? Use buy for that." : "Don't use your little tricks, they don't work. Use sell for that.");
           }
           const obj = JSON.parse(rows[0].inventory);
           if (obj[args[1]] == null || obj[args[1]] - numberToSell < 0) {
@@ -111,13 +111,15 @@ module.exports.run = async (client, msg, args) => {
             return msg.channel.send("Mate, that item does not exist.");
           }
           const item = items[args[1]];
+          
+          var itememoji = item[2].replace("<:" + itemlist.paper + ":", '')
+          
+          var itemlink = `https://cdn.discordapp.com/emojis/${itememoji}.png`
+          
           const embed = new Discord.RichEmbed().setColor("#ff0000")
-            .setAuthor(item[0])
-            .addField("Description", item[1])
-            .addField("Price", item[3]);
-          if (item.length === 5) {
-            embed.addField("Durability", item[4]);
-          }
+            .setAuthor("Item Info")
+            .setThumbnail(itemlink)
+            .addField(`${item[0]}`, `Description: ${item[1]}\nPrice: ${item[3]}${item.length === 5 ? `\nDurability: ${item[4]}` : ""}\nID: ${itemlist[0]}`);
           msg.channel.send(embed).catch(console.error);
         }
       }
