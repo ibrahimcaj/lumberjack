@@ -89,7 +89,22 @@ module.exports.run = async (client, msg, args) => {
           break;
         }
         case "item": {
-          ;
+          if (args.length === 1) {
+            return msg.channel.send("Please specify an item!");
+          }
+
+          if (!itemlist.includes(args[1])) {
+            return msg.channel.send("Mate, that item does not exist.");
+          }
+          const item = items[args[1]];
+          const embed = new Discord.RichEmbed().setColor("#ff0000")
+            .setAuthor(item[0])
+            .addField("Description", item[1])
+            .addField("Price", item[3]);
+          if (item.length === 5) {
+            embed.addField("Durability", item[4]);
+          }
+          msg.channel.send(embed).catch(console.error);
         }
       }
     }
