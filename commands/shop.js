@@ -59,6 +59,8 @@ module.exports.run = async (client, msg, args) => {
             db.run("INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)", [idAsNumber, difference, JSON.stringify(obj)], err => {
               if (!err) {
                 console.log("Inserted.");
+                
+                msg.channel.send("Item `" + args[1] + "` has been successfully bought.")
               }
             });
 
@@ -96,7 +98,9 @@ module.exports.run = async (client, msg, args) => {
           db.run("INSERT INTO wood(id, money, inventory) VALUES(?, ?, ?)",
             [idAsNumber, rows[0].money + (item[3] * numberToSell), JSON.stringify(obj)], err => {
             if (!err) {
-              console.log("Inserted.");
+              console.log("Inserted.")
+              
+              msg.channel.send("Item `" + args[1] + "` has been successfully sold.");
             }
           });
           break;
