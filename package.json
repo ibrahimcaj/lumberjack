@@ -1,0 +1,51 @@
+{
+  "name": "lumberjack-bot",
+  "version": "0.0.1",
+  "description": "A bot for lumberjack game, made for Discord Hack Week",
+  "keywords": [
+    "discord",
+    "discord.js",
+    "bot",
+    "lumberjack",
+    "game",
+    "JavaScript",
+    "js"
+  ],
+  "homepage": "https://github.com/vanishedvan/lumberjack#readme",
+  "bugs": {
+    "url": "https://github.com/vanishedvan/lumberjack/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "vanishedvan",
+    "url": "https://github.com/vanishedvan"
+  },
+  "contributors": [
+    {
+      "name": "LightWayUp",
+      "email": "lightwayuplightwayup@gmail.com",
+      "url": "https://lightwayup.github.io/"
+    },
+    {
+      "name": "EnderNator10",
+      "url": "https://maneki-neko.nl"
+    }
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vanishedvan/lumberjack.git"
+  },
+  "scripts": {
+    "start": "node --throw-deprecation index.js",
+    "test": "echo \"No test to run\" && exit 0"
+  },
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "sqlite3": "^4.0.9",
+    "random-value-generator": "^0.2.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}

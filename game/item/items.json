@@ -1,0 +1,116 @@
+{
+    "paper": {
+        "name": "Paper",
+        "description": "Paper. Just regular, ol' piece of paper. Please recycle paper.",
+        "emote": "<:paper:592648250461388821>",
+        "price": 1
+    },
+    "wood": {
+        "name": "WoodLog",
+        "friendlyName": "Wood",
+        "description": "A nice and heavy wood log.",
+        "emote": "<:log:592250155089133568>",
+        "price": 3
+    },
+    "stone": {
+        "name": "Stone",
+        "description": "Stone, just a regular stone.",
+        "emote": "<:stone:593737526880108544>",
+        "price": 5
+    },
+    "iron_bar": {
+        "name": "IronBar",
+        "friendlyName": "Iron Bar",
+        "description": "Useful iron bar to make everything stronger.",
+        "emote": "<:iron:593737578524442635>",
+        "price": 10
+    },
+    "gold_bar": {
+        "name": "GoldBar",
+        "friendlyName": "Gold Bar",
+        "description": "Super heavy and premium gold bars. If you can lift up gold bars, you're quite rich and also very strong.",
+        "emote": "<:gold:593737639266615306>",
+        "price": 12
+    },
+    "diamond": {
+        "name": "Diamond",
+        "description": "SHINY DIAMONDS!",
+        "emote": "<:diamond:593737686905257994>",
+        "price": 25
+    },
+    "stick": {
+        "name": "Stick",
+        "description": "You didn't believe you could cut down trees with a stick, but you can.",
+        "emote": "<:stick:592263677928013825>",
+        "price": 0,
+        "durability": {
+            "value1": 5,
+            "value2": 7
+        }
+    },
+    "wooden_axe": {
+        "name": "WoodAxe",
+        "friendlyName": "Wooden Axe",
+        "description": "A much better axe, made out of wood you cut.",
+        "emote": "<:wood_axe:592264114445746176>",
+        "price": 15,
+        "durability": {
+            "value1": 10,
+            "value2": 14
+        }
+    },
+    "stone_axe": {
+        "name": "StoneAxe",
+        "friendlyName": "Stone Axe",
+        "description": "An axe made out of stone. Pretty simple.",
+        "emote": "<:stone_axe:592264185262505984>",
+        "price": 30,
+        "durability": {
+            "value1": 15,
+            "value2": 17
+        }
+    },
+    "potato_axe": {
+        "name": "PotatoAxe",
+        "friendlyName": "Potato Axe",
+        "description": "An axe made out of potato. Time to make some mashed potato.",
+        "emote": "\ud83e\udd54",
+        "price": 30,
+        "durability": {
+            "value1": 9,
+            "value2": 11
+        }
+    },
+    "iron_axe": {
+        "name": "IronAxe",
+        "friendlyName": "Iron Axe",
+        "description": "Woah, another axe, but made out of freshly smelt iron.",
+        "emote": "<:iron_axe:592264236118441990>",
+        "price": 55,
+        "durability": {
+            "value1": 20,
+            "value2": 23
+        }
+    },
+    "golden_axe": {
+        "name": "GoldenAxe",
+        "friendlyName": "Golden Axe",
+        "description": "An beautiful axe that's super heavy and not quite as sharp. Who thought of making this axe?",
+        "emote": "<:iron_axe:592264236118441990>",
+        "price": 65,
+        "durability": {
+            "value1": 25,
+            "value2": 27
+        }
+    },
+    "diamond_axe": {
+        "name": "DiamondAxe",
+        "friendlyName": "Diamond Axe",
+        "description": "WOAH! AN AXE MADE OUT OF DIAMONDS? THAT'S SICK!",
+        "emote": "<:diamond_axe:592264284914974730>",
+        "price": 70,
+        "durability": {
+            "value1": 30
+        }
+    }
+}
