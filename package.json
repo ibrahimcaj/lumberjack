@@ -43,7 +43,8 @@
   "dependencies": {
     "discord.js": "^11.5.1",
     "sqlite3": "^4.0.9",
-    "random-value-generator": "^0.2.0"
+    "random-value-generator": "^0.2.0",
+    "sql-bricks": "^2.0.4"
   },
   "engines": {
     "node": ">=10.0.0"
