@@ -47,7 +47,7 @@ class Durability {
             throw new TypeError("value2 must be a positive integer!");
         }
 
-        if (value2 === undefined) {
+        if (value2 == null) {
             this.value = value1;
         } else {
             const min = Math.min(value1, value2);
