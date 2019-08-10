@@ -34,45 +34,34 @@ const {
     t,
     unwrap
 } = require("./utility/Type.js");
-const sqlite3 = require("sqlite3").verbose();
+const sqlite = require("sqlite");
+const {OPEN_READWRITE} = require("sqlite3");
 const sql = require("sql-bricks");
 const PATH = "./jack.db";
 
+const VERBOSE_OPTION = {verbose: true};
 const PLACEHOLDER_OPTION = {placeholder: "?"};
-let dbPromise;
 const ERROR_CANNOT_ACCESS_DATABASE = "Can't access database!";
+let dbPromise;
 
 function getDatabase() {
 
     if (!dbPromise) {
-        dbPromise = new Promise(resolve => {
+        const addErrorEventListener = db => db.on("error", console.error);
 
-            let db = new sqlite3.Database(PATH, sqlite3.OPEN_READWRITE, error => {
+        dbPromise = sqlite.open(PATH, Object.assign({mode: OPEN_READWRITE}, VERBOSE_OPTION)).then(addErrorEventListener,
 
-                if (!error) {
-                    return resolve(db.on("error", console.error));
-                }
+            () => sqlite.open(VERBOSE_OPTION).then(db => db.run(`
 
-                db = new sqlite3.Database(PATH, error => {
+                    CREATE TABLE ${Database.TABLE_NAME} (
+                        ${Database.ID}        ${Database.Queries.DataTypes.TEXT}    ${Database.Queries.Constraints.UNIQUE} ON CONFLICT REPLACE
+                                                                                    ${Database.Queries.Constraints.NOT_NULL},
+                        ${Database.MONEY}     ${Database.Queries.DataTypes.INTEGER} ${Database.Queries.Constraints.DEFAULT} ${0},
+                        ${Database.INVENTORY} ${Database.Queries.DataTypes.TEXT}    ${Database.Queries.Constraints.NOT_NULL}
+                    )
 
-                    if (error) {
-                        return resolve(console.error(error));
-                    }
-
-                    db.run(`
-
-CREATE TABLE ${Database.TABLE_NAME} (
-    ${Database.ID}        ${Database.Queries.DataTypes.TEXT}    ${Database.Queries.Constraints.UNIQUE} ON CONFLICT REPLACE
-                                                                ${Database.Queries.Constraints.NOT_NULL},
-    ${Database.MONEY}     ${Database.Queries.DataTypes.INTEGER} ${Database.Queries.Constraints.DEFAULT} ${0},
-    ${Database.INVENTORY} ${Database.Queries.DataTypes.TEXT}    ${Database.Queries.Constraints.NOT_NULL}
-)
-                    `.trim().replace(/(\s*\r*\n+\s*)|(\s+)/g, " "),
-
-                        error => resolve(error ? console.error(error) : db.on("error", console.error)));
-                });
-            });
-        });
+                `.trim().replace(/(\s*\r*\n+\s*)|(\s+)/g, " "))
+                .then(() => addErrorEventListener(db))).catch(console.error));
     }
     return dbPromise;
 }
@@ -87,10 +76,10 @@ function update(user) {
         return Promise.reject(new Error("update is called but database is already closed."));
     }
 
-    return new Promise((resolve, reject) => getDatabase().then(db => {
+    return getDatabase().then(db => {
 
         if (!db) {
-            return reject(new Error(ERROR_CANNOT_ACCESS_DATABASE));
+            throw new Error(ERROR_CANNOT_ACCESS_DATABASE);
         }
 
         const params = sql
@@ -98,8 +87,8 @@ function update(user) {
             .values(user[Database.ID], user[Database.MONEY], JSON.stringify(user[Database.INVENTORY]))
             .toParams(PLACEHOLDER_OPTION);
 
-        db.run(params.text, params.values, error => error ? reject(error) : resolve(user));
-    }));
+        return db.run(params.text, params.values).then(() => user);
+    });
 }
 
 function retrieve(id, abortIfNon) {
@@ -114,50 +103,40 @@ function retrieve(id, abortIfNon) {
         return Promise.reject(new Error("retrieve is called but database is already closed."));
     }
 
-    return new Promise((resolve, reject) => getDatabase().then(db => {
+    return getDatabase().then(db => {
 
         if (!db) {
-            return reject(new Error(ERROR_CANNOT_ACCESS_DATABASE));
+            throw new Error(ERROR_CANNOT_ACCESS_DATABASE);
         }
 
         const rowToUser = row => new User(row.id, row.money, row.inventory);
         const query = sql.select().from(Database.TABLE_NAME);
 
         if (id == null) {
-            db.all(query.toParams().text, (error, rows) => error ? reject(error) :
-
-                resolve(rows.map(row => {
-                    try {
-                        return rowToUser(row);
-                    } catch (error) {
-                        return error;
-                    }
-                })));
+            return db.all(query.toParams().text).then(rows => rows.map(row => {
+                try {
+                    return rowToUser(row);
+                } catch (error) {
+                    return error;
+                }
+            }));
 
         } else {
             const params = query.where(Database.ID, id).toParams(PLACEHOLDER_OPTION);
-            db.get(params.text, params.values, (error, row) => {
-
-                if (error) {
-                    return reject(error);
-                }
+            return db.get(params.text, params.values).then(row => {
 
                 if (!row) {
                     if (abortIfNon) {
-                        return resolve();
+                        return;
                     }
                     const user = new User(id);
-                    return update(user).catch(console.error).finally(() => resolve(user));
+                    return update(user).catch(console.error).finally(() => user);
                 }
-
-                try {
-                    resolve(rowToUser(row));
-                } catch (error) {
-                    reject(error);
-                }
+    
+                return rowToUser(row);
             });
         }
-    }));
+    });
 }
 
 function remove(id) {
@@ -172,15 +151,15 @@ function remove(id) {
     }
 
     console.log(`Attempting to delete row whose ID is ${id}`);
-    return new Promise((resolve, reject) => getDatabase().then(db => {
+    return getDatabase().then(db => {
 
         if (!db) {
-            return reject(new Error(ERROR_CANNOT_ACCESS_DATABASE));
+            throw new Error(ERROR_CANNOT_ACCESS_DATABASE);
         }
 
         const params = sql.deleteFrom(Database.TABLE_NAME).where(Database.ID, id).toParams(PLACEHOLDER_OPTION);
-        db.run(params.text, params.values, error => error ? reject(error) : resolve());
-    }));
+        return db.run(params.text, params.values);
+    });
 }
 
 function closeDatabase() {
@@ -189,20 +168,15 @@ function closeDatabase() {
         return Promise.reject(new Error("closeDatabase is called but it was already called previously."));
     }
 
-    return new Promise((resolve, reject) => getDatabase().then(db => {
+    return getDatabase().then(async db => {
 
         if (!db) {
-            return reject(new Error(ERROR_CANNOT_ACCESS_DATABASE));
+            throw new Error(ERROR_CANNOT_ACCESS_DATABASE);
         }
 
-        db.close(error => {
-            if (error) {
-                return reject(error);
-            }
-            process.env.DATABASE_CLOSED = "true";
-            resolve();
-        });
-    }));
+        await db.close();
+        process.env.DATABASE_CLOSED = "true";
+    });
 }
 
 function fixData(id) {
@@ -216,18 +190,17 @@ function fixData(id) {
         return Promise.reject(new Error("fixData is called but database is already closed."));
     }
 
-    const testId = idToTest => /^\d+$/.test(idToTest);
-
-    return new Promise((resolve, reject) => getDatabase().then(db => {
+    return getDatabase().then(db => {
 
         if (!db) {
-            return reject(new Error(ERROR_CANNOT_ACCESS_DATABASE));
+            throw new Error(ERROR_CANNOT_ACCESS_DATABASE);
         }
 
-        retrieve(id, true).then(async users => {
+        const testId = idToTest => /^\d+$/.test(idToTest);
+        return retrieve(id, true).then(async users => {
 
             if (!users) {
-                return reject(new Error(`User with ID ${id} is not in the database`));
+                throw new Error(`User with ID ${id} is not in the database`);
             }
 
             const fixDataPromiseFunction = user => {
@@ -259,13 +232,18 @@ function fixData(id) {
                         results.push(await fixDataPromiseFunction(user).catch(error => error));
                     }
                 }
-                return resolve(results);
+                return results;
             }
 
-            resolve(fixDataPromiseFunction(users));
+            return fixDataPromiseFunction(users);
 
-        }, error => t(error, InventoryCorruptedError) ? resolve((testId(id) ? fixRawData : remove)(id)) : reject(error));
-    }));
+        }, error => {
+            if (t(error, InventoryCorruptedError)) {
+                return (testId(id) ? fixRawData : remove)(id);
+            }
+            throw error;
+        });
+    });
 }
 
 function fixRawData(id) {
@@ -279,18 +257,14 @@ function fixRawData(id) {
         return Promise.reject(new Error("fixRawData is called but database is already closed."));
     }
 
-    return new Promise((resolve, reject) => getDatabase().then(db => {
+    return getDatabase().then(db => {
 
         if (!db) {
-            return reject(new Error(ERROR_CANNOT_ACCESS_DATABASE));
+            throw new Error(ERROR_CANNOT_ACCESS_DATABASE);
         }
 
         const selectParams = sql.select().from(Database.TABLE_NAME).where(Database.ID, id).toParams(PLACEHOLDER_OPTION);
-        db.get(selectParams.text, selectParams.values, (error, row) => {
-
-            if (error) {
-                return reject(error);
-            }
+        return db.get(selectParams.text, selectParams.values).then(row => {
 
             let parsed;
             try {
@@ -342,9 +316,9 @@ function fixRawData(id) {
                 .values(id, JSON.stringify(parsed ? parsed : new Inventory(id)))
                 .toParams(PLACEHOLDER_OPTION);
 
-            db.run(insertParams.text, insertParams.values, error => error ? reject(error) : resolve());
+            return db.run(insertParams.text, insertParams.values);
         });
-    }));
+    });
 }
 
 module.exports = {
