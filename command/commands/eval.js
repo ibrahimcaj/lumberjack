@@ -70,7 +70,7 @@ function run(client, message, args) {
             args: args,
             require: moduleId => require(moduleId.includes("./") ? resolve(resolve(), moduleId) : moduleId)
         });
-        const PromiseInContext = vm.runInContext("globalThis;", context).Promise;
+        const PromiseInContext = vm.runInContext("this;", context).Promise;
 
         const wrap = "`".repeat(3);
         result = vm.runInContext(args.length ?
