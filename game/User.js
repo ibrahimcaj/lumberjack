@@ -30,6 +30,7 @@ const {WoodLog} = require("./item/CommonItems.js");
 const {Stick} = require("./item/axe/CommonAxes.js");
 const {
     t,
+    pt,
     isClass,
     unwrap
 } = require("../utility/Type.js");
@@ -112,7 +113,7 @@ class User {
         }
 
         let addition = 0;
-        if (t(Type, Axe)) {
+        if (pt(Type, Axe)) {
 
             while (amount--) {
                 const item = this.inventory.getBestAxe(Type);

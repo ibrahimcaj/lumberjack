@@ -23,11 +23,16 @@
 
 "use strict";
 
+// t relies on:
+// isClass
+// (isUpperCase)
+// unwrap
 function t(object, type) {
 
-    const typeOfType = typeof type;
-    if (!(typeOfType === "function" || typeOfType === "string")) {
-        throw new TypeError("Incorrect type for t argument!");
+    type = unwrap(type);
+    const typeIsString = typeof type === "string";
+    if (!(typeIsString || isClass(type))) {
+        throw new TypeError("Incorrect type for t arguments!");
     }
 
     // t(null, "null")
@@ -36,22 +41,36 @@ function t(object, type) {
     }
 
     // t(true, "boolean")
-    if (typeof type === "string") {
+    if (typeIsString) {
         return typeof object === type;
     }
 
     // class A {}
     // class B extends A {}
-
-    // t(B, A)
-    if (isClass(object)) {
-        return object.prototype instanceof type || object === type;
-    }
-
     // t(new B(), A)
     return object instanceof type;
 }
 
+// pt relies on:
+// isClass
+// (isUpperCase)
+// (unwrap)
+// t
+function pt(object, type) {
+
+    if (!(isClass(object) && isClass(type))) {
+        throw new TypeError("Incorrect type(s) for pt arguments!");
+    }
+
+    // class A {}
+    // class B extends A {}
+    // t(B, A)
+    return object === type || t(object.prototype, type);
+}
+
+// isClass relies on:
+// isUpperCase
+// (unwrap)
 function isClass(object) {
 
     if (typeof object !== "function") {
@@ -64,19 +83,22 @@ function isClass(object) {
         (string.startsWith("function ") && name != null && isUpperCase(name.charAt(0)));
 }
 
+// isFunction relies on:
+// t
+// (isClass)
+// (isUpperCase)
+// (unwrap)
 function isFunction(object) {
 
-    const string = object.toString();
-    return typeof object === "function" &&
-        /^((function(\s+.*\s*)*\(.*\).*)|(((\(.*\))|(\S+))\s*\=\>.*))/.test(string);
+    return t(object, "function") &&
+        /^((function(\s+.*\s*)*\(.*\).*)|(((\(.*\))|(\S+))\s*\=\>.*))/.test(object.toString());
 }
 
+// isUpperCase relies on:
+// unwrap
 function isUpperCase(string) {
 
-    if (string instanceof String) {
-        string = string.valueOf();
-    }
-
+    string = unwrap(string);
     if (typeof string !== "string") {
         throw new TypeError("Incorrect type for isUpperCase argument!");
     }
@@ -85,11 +107,12 @@ function isUpperCase(string) {
 }
 
 function unwrap(object) {
-    return [Boolean, Number, String, Symbol].some(Wrapper => t(object, Wrapper)) ? object.valueOf() : object;
+    return [Boolean, Number, String, Symbol].some(Wrapper => object instanceof Wrapper) ? object.valueOf() : object;
 }
 
 module.exports = {
     t,
+    pt,
     isClass,
     isFunction,
     unwrap

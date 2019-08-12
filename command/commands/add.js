@@ -32,6 +32,7 @@ const MessageUtilities = require("../../utility/discord/MessageUtilities.js");
 const {isDeveloper} = require("../../Config.js");
 const {
     t,
+    pt,
     unwrap
 } = require("../../utility/Type.js");
 const Help = require("../Help.js");
@@ -115,7 +116,7 @@ function run(any, message, args) {
         let absolute = amount > 0 ? amount : -amount;
         if (amount > 0) {
             inventory.addByType(Type, amount);
-        } else if (t(Type, Axe)) {
+        } else if (pt(Type, Axe)) {
             while (absolute--) {
                 inventory.delete(inventory.getBestAxe(Type));
             }

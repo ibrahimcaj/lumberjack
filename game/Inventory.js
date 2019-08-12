@@ -29,6 +29,7 @@ const {getAllTypes} = require("../utility/ItemUtilities.js");
 const InventoryCorruptedError = require("./InventoryCorruptedError.js");
 const {
     t,
+    pt,
     isFunction,
     unwrap
 } = require("../utility/Type.js");
@@ -73,7 +74,7 @@ class Inventory extends Set {
     addByType(Type, amount, ...parameters) {
 
         amount = unwrap(amount);
-        if (!(t(Type, Item) && t(amount, "number"))) {
+        if (!(pt(Type, Item) && t(amount, "number"))) {
             throw new TypeError("Incorrect type(s) for addByType arguments!");
         }
 
@@ -90,7 +91,7 @@ class Inventory extends Set {
     deleteByType(Type, amount, sortFunction) {
 
         amount = unwrap(amount);
-        if (!(t(Type, Item) && t(amount, "number") && (sortFunction == null || isFunction(sortFunction)))) {
+        if (!(pt(Type, Item) && t(amount, "number") && (sortFunction == null || isFunction(sortFunction)))) {
             throw new TypeError("Incorrect type(s) for deleteByType arguments!");
         }
 
@@ -116,7 +117,7 @@ class Inventory extends Set {
 
     getBestAxe(Type) {
 
-        if (!(Type == null || t(Type, Axe))) {
+        if (!(Type == null || pt(Type, Axe))) {
             throw new TypeError("Incorrect type for getBestAxe argument!");
         }
 
@@ -132,7 +133,7 @@ class Inventory extends Set {
 
     count(Type) {
 
-        if (!t(Type, Item)) {
+        if (!pt(Type, Item)) {
             throw new TypeError("Incorrect type for count argument!");
         }
 
