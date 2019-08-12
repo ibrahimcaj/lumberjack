@@ -32,6 +32,7 @@ const {Database} = require("./Constants.js");
 const {getAllTypes} = require("./utility/ItemUtilities.js");
 const {
     t,
+    pt,
     unwrap
 } = require("./utility/Type.js");
 const sqlite = require("sqlite");
@@ -47,7 +48,10 @@ let dbPromise;
 function getDatabase() {
 
     if (!dbPromise) {
-        const addErrorEventListener = db => db.on("error", console.error);
+        const addErrorEventListener = db => {
+            db.on("error", console.error);
+            return db;
+        }
 
         dbPromise = sqlite.open(PATH, Object.assign({mode: OPEN_READWRITE}, VERBOSE_OPTION)).then(addErrorEventListener,
 
@@ -296,7 +300,7 @@ function fixRawData(id) {
                         const Type = allTypes[name];
                         const durability = item.durability;
 
-                        if (t(Type, Axe)) {
+                        if (pt(Type, Axe)) {
                             const details = sGetItemDetails(Type);
 
                             if (durability === undefined || !(Number.isInteger(durability) && durability > 0) ||
