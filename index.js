@@ -30,6 +30,7 @@ const {
     t,
     unwrap
 } = require("./utility/Type.js");
+const {Activities} = require("./Constants.js");
 
 const Discord = require("discord.js");
 const Events = Discord.Constants.Events;
@@ -42,6 +43,7 @@ const path = require("path");
 
 const credentialsConfig = require("./credentials-config.json");
 const PREFIX = require("./config.json").prefix;
+let activityI = 0;
 
 process.on("uncaughtException", error => {
     console.error(error);
@@ -86,13 +88,19 @@ Database.fixData().then(results => {
     console.log(`Examined and fixed data in the database, ${results.length - errorsLength} successes and ${errorsLength} failures.`);
 });
 
-client.once(Events.READY, () =>
+client.once(Events.READY, () => {
 
-    client.user.setActivity("the trees.", {type: "WATCHING"})
-    .catch(error => console.error(`An error occured while setting presence!\n\n${error.stack}`))
-    .finally(() => console.log(`${client.user.username} is online on ${client.guilds.size} servers!`)))
+    console.log(`${client.user.username} is online on ${client.guilds.size} servers!`);
 
-.on(Events.MESSAGE_CREATE, async message => {
+    const changeActivity = () => {
+        const activity = nextActivity();
+        client.user.setActivity(activity.text, activity.option)
+        .catch(error => console.error(`An error occured while setting presence!\n\n${error.stack}`));
+    };
+    changeActivity();
+    client.setInterval(changeActivity, 10000);
+
+}).on(Events.MESSAGE_CREATE, async message => {
 
     const channelType = message.channel.type;
     const isDM = channelType === "dm";
@@ -135,6 +143,20 @@ client.once(Events.READY, () =>
     console.error(`An error occured while logging in!\n\n${error.stack}`);
     exit();
 });
+
+function nextActivity() {
+
+    const activities = Object.values(Activities);
+    const length = activities.length;
+    if (!length) {
+        return {text: "Lumberjack"};
+    }
+
+    if (activityI === length) {
+        activityI = 0;
+    }
+    return activities[activityI++];
+}
 
 function readFilesInDirectorySync(directoryPath) {
 

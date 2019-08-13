@@ -51,5 +51,15 @@ module.exports = {
         CROSS: "<:red_tick:593737459888685082>",
         QUESTION: "<:question:593799971296509972>",
         EXCLAMATION: "<:exclamation:593800034969976843>"
+    },
+    Activities: {
+        WATCHING_TREES: {
+            text: "the trees.",
+            option: {type: "WATCHING"}
+        },
+        USE_HELP: {
+            text: "!help",
+            option: {type: "PLAYING"}
+        }
     }
 };
