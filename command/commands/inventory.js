@@ -105,7 +105,7 @@ async function run(client, message, args) {
     discordUser ?
         retrieve(discordUser.id, true).then(user => user ?
 
-            getEmbed(user).setTitle(`${discordUser.username}'s inventory`).send(channel).then(multiHandle) :
+            getEmbed(user).setTitle(`${Discord.escapeMarkdown(discordUser.username)}'s inventory`).send(channel).then(multiHandle) :
             channel.send(errorEmbed.setTitle("No data").setDescription("The user has not started playing yet."))).catch(handle) :
 
         retrieve(author.id).then(user => getEmbed(user).setTitle("Inventory").send(channel).then(multiHandle), handle);

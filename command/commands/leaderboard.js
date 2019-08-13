@@ -135,7 +135,7 @@ async function getEmbed(client, users, sortByString, emote, amount, unit, getQua
         await client.fetchUser(user.id).then(discordUser => {
 
             const embedFieldsLength = embed.fields.length;
-            const tag = discordUser.tag;
+            const tag = Discord.escapeMarkdown(discordUser.tag);
             const quantity = getQuantityFunction(user);
 
             if (embedFieldsLength === amount) {

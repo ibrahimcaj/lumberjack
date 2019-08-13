@@ -78,7 +78,7 @@ async function run(client, message, args) {
     discordUser ?
 
         retrieve(discordUser.id, true).then(user => channel.send(user ?
-            getEmbed(user).setTitle(`${discordUser.username}'s balance`) :
+            getEmbed(user).setTitle(`${Discord.escapeMarkdown(discordUser.username)}'s balance`) :
             errorEmbed.setTitle("No data").setDescription("The user has not started playing yet."))).catch(handle) :
 
         retrieve(author.id).then(user => channel.send(getEmbed(user).setTitle("Balance"))).catch(handle);
