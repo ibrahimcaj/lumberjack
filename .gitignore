@@ -1,0 +1,18 @@
+# Cache and additional info
+Thumbs.db
+.cache/
+Desktop.ini
+.DS_Store
+
+# Node.js dependencies
+node_modules/
+
+# npm
+.npmrc
+package-lock.json
+
+# Bot token
+credentials-config.json
+
+# Database
+jack.db
