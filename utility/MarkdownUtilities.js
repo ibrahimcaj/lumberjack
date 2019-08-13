@@ -32,13 +32,13 @@ function bold(object) {
 
     const character = "*";
     const wrap = character.repeat(2);
-    return `${wrap}${object.toString().replace(new RegExp(`\\${character}`, "gi"), `\\${character}`)}${wrap}`;
+    return `${wrap}${String(object).replace(new RegExp(`\\${character}`, "gi"), `\\${character}`)}${wrap}`;
 }
 
 function code(object) {
 
     const character = "`";
-    return `${character}${object.toString().replace(new RegExp(character, "gi"), `\\${character}`)}${character}`;
+    return `${character}${String(object).replace(new RegExp(character, "gi"), `\\${character}`)}${character}`;
 }
 
 function codeBlock(object, language) {
@@ -51,7 +51,7 @@ function codeBlock(object, language) {
     const character = "`";
     const wrap = character.repeat(3);
 
-    const replaced = object.toString().replace(new RegExp(character, "g"), `${character}\u200b`);
+    const replaced = String(object).replace(new RegExp(character, "g"), `${character}\u200b`);
     return `${wrap}${language ? language : ""}\n${replaced.length ? replaced : " "}${wrap}`;
 }
 
