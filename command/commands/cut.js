@@ -71,7 +71,7 @@ function run(any, message) {
                     const generatedCode = random.randomHash(5);
 
                     channel.send(embed.setTitle("Found a tree").setThumbnail(MessageUtilities.getEmojiUrl("\ud83c\udf32"))
-                        .setImage(`https://raw.githubusercontent.com/vanishedvan/lumberjack/light/assets/${axe.toString().replace(/(^\[object\s)|(\]$)/g, "")}AndWoodLog.png`)
+                        .setImage(`https://raw.githubusercontent.com/vanishedvan/lumberjack/assets/assets/${axe.toString().replace(/(^\[object\s)|(\]$)/g, "")}AndWoodLog.png`)
                         .setDescription(`I found a tree! To cut the tree down, please enter this code: ${code(generatedCode)}. You have ${COLLECTOR_TIME} seconds.`))
                     .then(() => {
 
