@@ -55,7 +55,7 @@ function getDatabase() {
 
         dbPromise = sqlite.open(PATH, Object.assign({mode: OPEN_READWRITE}, VERBOSE_OPTION)).then(addErrorEventListener,
 
-            () => sqlite.open(VERBOSE_OPTION).then(db => db.run(`
+            () => sqlite.open(PATH, VERBOSE_OPTION).then(db => db.run(`
 
                     CREATE TABLE ${Database.TABLE_NAME} (
                         ${Database.ID}        ${Database.Queries.DataTypes.TEXT}    ${Database.Queries.Constraints.UNIQUE} ON CONFLICT REPLACE
