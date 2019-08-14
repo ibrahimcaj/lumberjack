@@ -1,6 +1,6 @@
 {
   "name": "lumberjack-bot",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A bot for lumberjack game, made for Discord Hack Week",
   "keywords": [
     "discord",

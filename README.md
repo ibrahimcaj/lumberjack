@@ -12,7 +12,7 @@ A bot for lumberjack game, made for 2019 Discord Hack Week.
 
 ## Branches
 
-* [***Reimplementation branch***](https://github.com/vanishedvan/lumberjack/tree/reimplementation)
+* [***Reimplementation branch***](https://github.com/vanishedvan/lumberjack/tree/reimplementation-release)
 * [***Master branch***](https://github.com/vanishedvan/lumberjack/tree/master)
 
 ## Commands
@@ -25,9 +25,6 @@ A bot for lumberjack game, made for 2019 Discord Hack Week.
 * `!eval` - Evaluates JavaScript code represented as a string. ![Only for owner][Only for owner badge]
 * `!fixdata` - Examine and fix corrupted data for all users in the database. ![Only for developers][Only for developers badge]
   * `!fixdata <user>` - Examine and fix corrupted data for specified user in the database. ![Only for developers][Only for developers badge]
-* `!give` - Give money and items to other users.
-  * `!give <item> [amount]` - Give items to other users.
-  * `!give balance <amount>` - Give money to other users.
 * `!help` - It's just a list of my commands.
   * `!help <command>` - Get more detailed information about a command.
 * `!inventory` - Check out what is in your bag.
