@@ -24,28 +24,18 @@
 "use strict";
 
 const Axe = require("./Axe.js");
-const CraftableAxe = require("./CraftableAxe.js");
 
-class Stick extends Axe {}
+/**
+ * @abstract
+ */
+class CraftableAxe extends Axe {
 
-class WoodAxe extends Axe {}
+    /**
+     * @override
+     */
+    isAbstract() {
+        return this.constructor === CraftableAxe;
+    }
+}
 
-class StoneAxe extends CraftableAxe {}
-
-class PotatoAxe extends Axe {}
-
-class IronAxe extends CraftableAxe {}
-
-class GoldenAxe extends CraftableAxe {}
-
-class DiamondAxe extends Axe {}
-
-module.exports = {
-    Stick,
-    WoodAxe,
-    StoneAxe,
-    PotatoAxe,
-    IronAxe,
-    GoldenAxe,
-    DiamondAxe
-};
+module.exports = CraftableAxe;
