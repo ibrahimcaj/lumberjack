@@ -24,14 +24,13 @@
 "use strict";
 
 const Inventory = require("./Inventory.js");
-const {sGetItemDetails} = require("./item/Item.js");
+const Item = require("./item/Item.js");
 const Axe = require("./item/axe/Axe.js");
 const {WoodLog} = require("./item/CommonItems.js");
 const {Stick} = require("./item/axe/CommonAxes.js");
 const {
     t,
     pt,
-    isClass,
     unwrap
 } = require("../utility/Type.js");
 const random = require("random-value-generator");
@@ -63,7 +62,7 @@ class User {
     buy(Type, amount) {
 
         amount = unwrap(amount);
-        if (!(isClass(Type) && (amount == null || t(amount, "number")))) {
+        if (!(pt(Type, Item) && (amount == null || t(amount, "number")))) {
             throw new TypeError("Incorrect type(s) for buy arguments!");
         }
 
@@ -75,7 +74,7 @@ class User {
             amount = 1;
         }
 
-        const totalCost = sGetItemDetails(Type).price * amount;
+        const totalCost = Item.sGetItemDetails(Type).price * amount;
         if (this.money < totalCost) {
             return -1;
         }
@@ -88,7 +87,7 @@ class User {
     sell(Type, amount) {
 
         amount = unwrap(amount);
-        if (!(isClass(Type) && (amount == null || t(amount, "number")))) {
+        if (!(pt(Type, Item) && (amount == null || t(amount, "number")))) {
             throw new TypeError("Incorrect type(s) for sell arguments!");
         }
 
@@ -103,7 +102,7 @@ class User {
             return -1;
         }
 
-        const details = sGetItemDetails(Type);
+        const details = Item.sGetItemDetails(Type);
         const price = details.price;
         let averageDurability = details.durability;
         if (averageDurability !== undefined) {
