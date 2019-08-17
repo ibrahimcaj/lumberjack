@@ -126,6 +126,7 @@ class UserResolver {
         if (!(t(source, "string") && t(client, Discord.Client))) {
             throw new TypeError("Incorrect type(s) for resolveUser arguments!");
         }
+        source = source.substring(0, 32 + "#0000".length);
 
         const matchedUsers = new Set();
         return new Promise(async (resolve, reject) => {
@@ -152,7 +153,7 @@ class UserResolver {
             const isMatched = user => {
                 const userId = user.id;
                 return [userId, user.username, user.tag].some(string => toProperCase(string) === toProperCase(source)) ||
-                    new RegExp(`^<@\\!?${user.id}>$`).test(source);
+                    new RegExp(`^<@\\!?${userId}>$`).test(source);
             };
             const isNotBlacklisted = userOrMember => !this.userBlacklist.includes(userOrMember.id);
 
