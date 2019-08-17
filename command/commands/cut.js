@@ -34,8 +34,11 @@ const Help = require("../Help.js");
 const random = require("random-value-generator");
 
 const cooldownMap = new Map();
-const COOLDOWN_TIME = 300;
-const COLLECTOR_TIME = 7;
+const Time = {
+    COOLDOWN: 300,
+    COLLECTOR: 10,
+    REDUCED_REWARD: 3
+};
 
 function run(any, message) {
 
@@ -51,9 +54,11 @@ function run(any, message) {
     let embed = MessageUtilities.errorRichEmbed(author);
 
     const previousTime = cooldownMap.get(id);
-    if (previousTime !== undefined && (createdTime - previousTime) / 1000 < COOLDOWN_TIME) {
+    if (previousTime !== undefined && (createdTime - previousTime) / 1000 < Time.COOLDOWN) {
+        const waitTime = Time.COOLDOWN / 60;
         return channel.send(embed.setTitle("Cooldown")
-            .setDescription(`You have to wait ${COOLDOWN_TIME / 60} minutes between cutting down trees.`)).catch(handle);
+            .setDescription(`You have to wait ${Number.isInteger(waitTime) ? waitTime : `around ${Math.ceil(waitTime)}`
+                } minutes between cutting down trees.`)).catch(handle);
     }
 
     Database.retrieve(id).then(user => {
@@ -72,22 +77,25 @@ function run(any, message) {
 
                     channel.send(embed.setTitle("Found a tree").setThumbnail(MessageUtilities.getEmojiUrl("\ud83c\udf32"))
                         .setImage(`https://raw.githubusercontent.com/vanishedvan/lumberjack/assets/assets/${axe.toString().replace(/(^\[object\s)|(\]$)/g, "")}AndWoodLog.png`)
-                        .setDescription(`I found a tree! To cut the tree down, please enter this code: ${code(generatedCode)}. You have ${COLLECTOR_TIME} seconds.`))
-                    .then(() => {
+                        .setDescription(`I found a tree! To cut the tree down, please enter this code: ${code(generatedCode)}. You have ${Time.COLLECTOR} seconds.`))
+                    .then(sent => {
 
                         embed = MessageUtilities.errorRichEmbed(author);
                         channel.awaitMessages(toCollect => toCollect.author.id === id, {
                             max: 1,
-                            time: COLLECTOR_TIME * 1000,
+                            time: Time.COLLECTOR * 1000,
                             errors: ["time"]
                         }).then(collected => {
 
-                            if (collected.first().content !== generatedCode) {
+                            const firstCollected = collected.first();
+                            if (firstCollected.content !== generatedCode) {
                                 return channel.send(embed.setTitle("Incorrect code")
                                     .setDescription("You entered the wrong code. Please try using the command again.")).catch(handle);
                             }
 
-                            const numberOfLogs = user.cut(axe);
+                            const numberOfLogs = user.cut(axe,
+                                ...((firstCollected.createdTimestamp - sent.createdTimestamp) / 1000 > Time.COLLECTOR - Time.REDUCED_REWARD ?
+                                [1, 2] : [3, 5]));
                             Database.update(user).then(() => {
 
                                 embed = MessageUtilities.richEmbed(author);
