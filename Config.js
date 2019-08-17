@@ -33,7 +33,7 @@ function isOwner(discordUser) {
         throw new TypeError("Incorrect type for isOwner argument!");
     }
 
-    return config.ownerID === discordUser.id;
+    return config.ownerID === discordUser.id || (config.relaxedPolicy && isDeveloper(discordUser));
 }
 
 function isDeveloper(discordUser) {
