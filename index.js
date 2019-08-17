@@ -101,7 +101,7 @@ client.once(Events.READY, () => {
     changeActivity();
     client.setInterval(changeActivity, 15000);
 
-    client.guilds.filter(guild => guild.memberCount >= 5000).forEach(UserResolver.getInstance().addToBlacklist);
+    client.guilds.filter(guild => guild.memberCount >= 5000).forEach(guild => UserResolver.getInstance().addToBlacklist(guild));
 
 }).on(Events.MESSAGE_CREATE, async message => {
 
