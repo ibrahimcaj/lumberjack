@@ -128,10 +128,20 @@ class User {
         return addition;
     }
 
-    cut(axe) {
+    cut(axe, value1, value2) {
 
-        if (!t(axe, Axe)) {
-            throw new TypeError("Incorrect type for cut argument!");
+        value1 = unwrap(value1);
+        value2 = unwrap(value2);
+        if (!(t(axe, Axe) && t(value1, "number") && t(value2, "number"))) {
+            throw new TypeError("Incorrect type(s) for cut arguments!");
+        }
+
+        if (!(Number.isInteger(value1) && value1 > 0)) {
+            throw new RangeError("value1 must be a positive integer!");
+        }
+
+        if (!(Number.isInteger(value2) && value2 > 0)) {
+            throw new RangeError("value2 must be a positive integer!");
         }
 
         if (!this.inventory.has(axe)) {
@@ -148,8 +158,8 @@ class User {
 
         let number = 0;
         if (random.randomNumber() > (1 / 150)) {
-            const min = 1;
-            number = min + random.randomInteger(6 - min);
+            const min = Math.min(value1, value2);
+            number = min + random.randomInteger(Math.max(value1, value2) - min);
             this.inventory.addByType(WoodLog, number);
         } else {
             this.inventory.clear();
