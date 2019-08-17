@@ -31,6 +31,7 @@ const {
     unwrap
 } = require("./utility/Type.js");
 const {Activities} = require("./Constants.js");
+const UserResolver = require("./utility/discord/UserResolver.js");
 
 const Discord = require("discord.js");
 const Events = Discord.Constants.Events;
@@ -99,6 +100,8 @@ client.once(Events.READY, () => {
     };
     changeActivity();
     client.setInterval(changeActivity, 10000);
+
+    client.guilds.filter(guild => guild.memberCount >= 5000).forEach(UserResolver.getInstance().addToBlacklist);
 
 }).on(Events.MESSAGE_CREATE, async message => {
 

@@ -27,7 +27,7 @@ const {retrieve} = require("../../Database.js");
 const {Emotes} = require("../../Constants.js");
 const Discord = require("discord.js");
 const MessageUtilities = require("../../utility/discord/MessageUtilities.js");
-const {resolveUserRecursively} = require("../../utility/discord/UserUtilities.js");
+const UserResolver = require("../../utility/discord/UserResolver.js");
 const {
     t,
     unwrap
@@ -54,7 +54,8 @@ async function run(client, message, args) {
     let discordUser;
     if (args.length) {
 
-        const mentionedUsers = await resolveUserRecursively(content.substring(content.indexOf(args[0])), client);
+        const mentionedUsers = await UserResolver.getInstance()
+            .resolveUser(content.substring(content.indexOf(args[0])), client, new UserResolver.Option({recursive: true}));
         const mentionedNonBots = mentionedUsers.filter(user => !user.bot);
         const nonBotsLength = mentionedNonBots.length;
 
