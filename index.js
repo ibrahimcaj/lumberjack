@@ -99,7 +99,7 @@ client.once(Events.READY, () => {
         .catch(error => console.error(`An error occured while setting presence!\n\n${error.stack}`));
     };
     changeActivity();
-    client.setInterval(changeActivity, 10000);
+    client.setInterval(changeActivity, 15000);
 
     client.guilds.filter(guild => guild.memberCount >= 5000).forEach(UserResolver.getInstance().addToBlacklist);
 
