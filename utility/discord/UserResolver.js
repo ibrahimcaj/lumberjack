@@ -144,8 +144,8 @@ class UserResolver {
             if (limitedGuilds) {
                 filteredGuilds = filteredGuilds.filter(guild => limitedGuilds.some(limitedGuild => limitedGuild.id === guild.id));
             }
-            for (const guildEntry of filteredGuilds) {
-                await guildEntry[1].fetchMembers().catch(console.error);
+            for (const guild of filteredGuilds.values()) {
+                await guild.fetchMembers().catch(console.error);
             }
 
             const toProperCase = string => option.ignoreCase ? string.toLowerCase() : string;
@@ -162,7 +162,7 @@ class UserResolver {
                 .forEach(member => matchedUsers.add(member.user)));
 
             if (option.includeCache) {
-                client.users.filter(user => user.id === "1")
+                client.users.filter(user => user.id !== "1")
                 .filter(user => !Array.from(matchedUsers).some(matchedUser => user.id === matchedUser.id))
                 .filter(isNotBlacklisted)
                 .filter(isMatched)
