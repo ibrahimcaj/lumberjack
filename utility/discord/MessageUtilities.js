@@ -24,7 +24,7 @@
 "use strict";
 
 const ErrorRichEmbed = require("../../discord/ErrorRichEmbed.js");
-const {code} = require("../MarkdownUtilities.js");
+const MarkdownUtilities = require("../MarkdownUtilities.js");
 const MultiRichEmbed = require("../../discord/MultiRichEmbed.js");
 const {GENERIC_ERROR_TITLE} = require("../../Constants.js");
 const {
@@ -90,8 +90,9 @@ function getEmojiUrl(string) {
         throw new RangeError("string must not be empty!");
     }
 
-    if (/^\<\:.+\:\d+\>$/gi.test(string)) {
-        return `https://cdn.discordapp.com/emojis/${string.replace(/(^\<\:.+\:)|(\>$)/g, "")}.png`;
+    if (/^\<a?\:.+\:\d+\>$/gi.test(string)) {
+        return `https://cdn.discordapp.com/emojis/${string.replace(/(^\<a?\:.+\:)|(\>$)/g, "")}.${
+            /^\<a/gi.test(string) ? "gif" : "png"}`;
     }
 
     let codePointString = "";
@@ -118,7 +119,15 @@ function handleError(error, message) {
     console.error(error);
 
     if (message && message.client.readyAt) {
-        message.channel.send(richEmbed().setTitle(GENERIC_ERROR_TITLE).setDescription(code(error)))
+
+        let url = "https://github.com/vanishedvan/lumberjack/issues/new";
+        if (t(error, Error)) {
+            url += `?title=${encodeURIComponent(error.message.replace(/\n/g, " "))}&body=${encodeURIComponent(error)}`;
+        }
+
+        message.channel.send(richEmbed().setTitle(GENERIC_ERROR_TITLE).setDescription(MarkdownUtilities.code(error))
+            .addField("Frequently encountering this issue?", `Please report by ${
+                MarkdownUtilities.link("creating an issue here", url)}.`))
         .catch(console.error);
     }
 }
