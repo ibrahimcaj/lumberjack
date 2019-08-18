@@ -27,6 +27,7 @@ const {
     t,
     unwrap
 } = require("./Type.js");
+const {format} = require("url");
 
 function bold(object) {
 
@@ -39,6 +40,23 @@ function code(object) {
 
     const character = "`";
     return `${character}${String(object).replace(new RegExp(character, "gi"), `\\${character}`)}${character}`;
+}
+
+function link(object, url) {
+
+    url = unwrap(url);
+    if (!(t(url, "string") || t(url, URL))) {
+        throw new TypeError("Incorrect type for link arguments!");
+    }
+
+    if (t(url, URL)) {
+        url = format(url, {unicode: true});
+    }
+
+    const textEnd = "]";
+    const urlEnd = ")";
+    const escapeCharacter = (string, character) => string.replace(new RegExp(`\\${character}`, "gi"), `\\${character}`);
+    return `[${escapeCharacter(String(object), textEnd)}${textEnd}(${escapeCharacter(url, urlEnd)}${urlEnd}`;
 }
 
 function codeBlock(object, language) {
@@ -58,5 +76,6 @@ function codeBlock(object, language) {
 module.exports = {
     bold,
     code,
+    link,
     codeBlock
 };
