@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "discord.js": "^11.5.1",
-    "sqlite3": "^4.0.9",
+    "sqlite3": "^4.1.0",
     "sqlite": "^3.0.3",
     "random-value-generator": "^0.2.0",
     "sql-bricks": "^2.0.4"
