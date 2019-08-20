@@ -54,11 +54,14 @@ function run(any, message) {
     let embed = MessageUtilities.errorRichEmbed(author);
 
     const previousTime = cooldownMap.get(id);
-    if (previousTime !== undefined && (createdTime - previousTime) / 1000 < Time.COOLDOWN) {
-        const waitTime = Time.COOLDOWN / 60;
-        return channel.send(embed.setTitle("Cooldown")
-            .setDescription(`You have to wait ${Number.isInteger(waitTime) ? waitTime : `around ${Math.ceil(waitTime)}`
-                } minutes between cutting down trees.`)).catch(handle);
+    if (previousTime !== undefined) {
+        const remainingTimeInMinute = (Time.COOLDOWN - ((createdTime - previousTime) / 1000)) / 60;
+
+        if (remainingTimeInMinute > 0) {
+            return channel.send(embed.setTitle("Cooldown")
+                .setDescription(`You have to wait ${Number.isInteger(remainingTimeInMinute) ? remainingTimeInMinute :
+                    `around ${Math.ceil(remainingTimeInMinute)}`} minutes before cutting down another tree.`)).catch(handle);
+        }
     }
 
     Database.retrieve(id).then(user => {
