@@ -93,17 +93,21 @@ class UserResolver {
         }
 
         const limitedGuilds = option.limitToGuilds;
-        if (t(source, Discord.GuildMember)) {
+        const isGuild = t(source, Discord.Guild);
+        if (t(source, Discord.GuildMember) || isGuild) {
 
-            const guildId = source.guild.id;
+            const guildId = isGuild ? source.id : source.guild.id;
             if (this.guildBlacklist.includes(guildId) ||
                 (limitedGuilds && !limitedGuilds.map(limitedGuild => limitedGuild.id).include(guildId))) {
                 return Promise.resolve();
             }
-            source = source.user;
+            source = isGuild ? source.owner.user : source.user;
 
         } else if (t(source, Discord.Client)) {
             source = source.user;
+
+        } else if (t(source, Discord.Message)) {
+            source = source.author;
         }
 
         if (t(source, Discord.User)) {
