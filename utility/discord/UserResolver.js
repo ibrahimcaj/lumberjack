@@ -109,7 +109,7 @@ class UserResolver {
 
             const guildId = source.guild.id;
             if (this.guildBlacklist.includes(guildId) ||
-                (limitedGuilds && !limitedGuilds.some(limitedGuild => limitedGuild.id === guildId))) {
+                (limitedGuilds && !limitedGuilds.map(limitedGuild => limitedGuild.id).include(guildId))) {
                 return Promise.resolve();
             }
             source = source.user;
@@ -143,7 +143,7 @@ class UserResolver {
 
             let filteredGuilds = client.guilds.filter(guild => !this.guildBlacklist.includes(guild.id));
             if (limitedGuilds) {
-                filteredGuilds = filteredGuilds.filter(guild => limitedGuilds.some(limitedGuild => limitedGuild.id === guild.id));
+                filteredGuilds = filteredGuilds.filter(guild => limitedGuilds.map(limitedGuild => limitedGuild.id).includes(guild.id));
             }
             for (const guild of filteredGuilds.values()) {
                 await guild.fetchMembers().catch(console.error);
@@ -164,7 +164,7 @@ class UserResolver {
 
             if (option.includeCache) {
                 client.users.filter(user => user.id !== "1")
-                .filter(user => !Array.from(matchedUsers).some(matchedUser => user.id === matchedUser.id))
+                .filter(user => !Array.from(matchedUsers).map(matchedUser => matchedUser.id).includes(user.id))
                 .filter(isNotBlacklisted)
                 .filter(isMatched)
                 .forEach(matchedUsers.add);

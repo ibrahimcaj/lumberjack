@@ -42,7 +42,7 @@ function isDeveloper(discordUser) {
         throw new TypeError("Incorrect type for isDeveloper argument!");
     }
 
-    return config.developerIDs.some(id => id === discordUser.id);
+    return config.developerIDs.includes(discordUser.id);
 }
 
 module.exports = {

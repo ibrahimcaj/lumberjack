@@ -88,7 +88,7 @@ async function run(client, message, args) {
             const details = item.getItemDetails();
             const fieldName = `${details.emote} ${details.friendlyName}`;
 
-            if (multiEmbed.fields.some(field => field.name === fieldName)) {
+            if (multiEmbed.fields.map(field => field.name).includes(fieldName)) {
                 return;
             }
             multiEmbed.addField(fieldName, `Amount: ${inventory.count(item.constructor)}`);
