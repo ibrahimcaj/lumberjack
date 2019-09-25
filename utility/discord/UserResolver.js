@@ -126,7 +126,7 @@ class UserResolver {
         if (!(t(source, "string") && t(client, Discord.Client))) {
             throw new TypeError("Incorrect type(s) for resolveUser arguments!");
         }
-        source = source.substring(0, 32 + "#0000".length);
+        source = source.substring(0, source.indexOf(" ", 32 + "#0000".length));
 
         const matchedUsers = new Set();
         return new Promise(async (resolve, reject) => {
