@@ -29,32 +29,20 @@ const {
 } = require("../Type.js");
 const Discord = require("discord.js");
 
-const privateValidator = Symbol();
-let instance;
-
 class UserResolver {
 
-    constructor(_privateValidator) {
-
-        if (_privateValidator !== privateValidator) {
-            throw new Error("UserResolver is private!");
-        }
+    constructor() {
 
         this.guildBlacklist = [];
         this.userBlacklist = [];
     }
 
-    static getInstance() {
-
-        if (!instance) {
-            instance = new UserResolver(privateValidator);
-        }
-
-        return instance;
-    }
-
     static get Option() {
         return UserResolverOption;
+    }
+
+    newOption(object) {
+        return new UserResolverOption(object);
     }
 
     addToBlacklist(target) {
@@ -126,7 +114,10 @@ class UserResolver {
         if (!(t(source, "string") && t(client, Discord.Client))) {
             throw new TypeError("Incorrect type(s) for resolveUser arguments!");
         }
-        source = source.substring(0, source.indexOf(" ", 32 + "#0000".length));
+        const splitIndex = source.indexOf(" ", 32 + "#0000".length);
+        if (splitIndex !== -1) {
+            source = source.substring(0, splitIndex);
+        }
 
         const matchedUsers = new Set();
         return new Promise(async (resolve, reject) => {
