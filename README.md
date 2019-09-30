@@ -4,6 +4,8 @@
 
 A bot for lumberjack game, made for 2019 Discord Hack Week.
 
+Check it out on the Discord Bot List! https://discordbots.org/bot/592760868647862273
+
 ## Badges
 [![MIT License](https://img.shields.io/badge/license-MIT-0366d6.svg?longCache=true&style=flat-square)](/LICENSE) [![Node.js compatibility](https://img.shields.io/badge/node->%3D10.0.0-0366d6.svg?longCache=true&style=flat-square&logo=node.js&color=026e00)](https://nodejs.org/) [![Invite Lumberjack to Discord servers!](https://img.shields.io/badge/invite-to%20Discord-7289da.svg?longCache=true&style=flat-square&logo=discord)][OAuth2Link]
 
